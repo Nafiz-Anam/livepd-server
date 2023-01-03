@@ -1,0 +1,24 @@
+{
+    "development": {
+        "username": "root",
+        "password": null,
+        "database": "livepd",
+        "host": "127.0.0.1",
+        "table_prefix": "pg_",
+        "timezone": "utc"
+    },
+    "test": {
+        "username": "root",
+        "password": null,
+        "database": "livepd",
+        "host": "127.0.0.1",
+        "table_prefix": "pg_"
+    },
+    "production": {
+        "username": "root",
+        "password": null,
+        "database": "livepd",
+        "host": "127.0.0.1",
+        "table_prefix": "pg_"
+    }
+}
