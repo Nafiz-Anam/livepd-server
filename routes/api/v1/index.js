@@ -59,29 +59,30 @@ app.post(
     // Validator.country_details,
     merchants.details
 );
-// app.post(
-//     "/merchant/user/update",
-//     CheckHeader,
-//     Validator.country_update,
-//     merchants.update
-// );
-// app.post(
-//     "/merchant/user/deactivate",
-//     CheckHeader,
-//     Validator.country_deactivate,
-//     merchants.country_deactivate
-// );
-// app.post(
-//     "/merchant/user/activate",
-//     CheckHeader,
-//     Validator.country_activate,
-//     merchants.country_activate
-// );
-// app.post(
-//     "/merchant/user/delete",
-//     CheckHeader,
-//     Validator.country_delete,
-//     merchants.country_delete
-// );
+app.post(
+    "/merchant/user/update",
+    CheckHeader,
+    // Validator.country_update,
+    merchants.update
+);
+app.post(
+    "/merchant/user/deactivate",
+    CheckHeader,
+    // Validator.country_deactivate,
+    merchants.user_deactivate
+);
+app.post(
+    "/merchant/user/activate",
+    CheckHeader,
+    // Validator.country_activate,
+    merchants.user_activate
+);
+
+app.post(
+    "/merchant/user/delete",
+    CheckHeader,
+    // Validator.country_delete,
+    merchants.user_delete
+);
 
 module.exports = app;

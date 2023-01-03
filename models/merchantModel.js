@@ -1,4 +1,3 @@
-const path = require("path");
 require("dotenv").config({ path: "../.env" });
 const env = process.env.ENVIRONMENT;
 const config = require("../config/config.json")[env];
@@ -9,7 +8,7 @@ const dbtable = config.table_prefix + "master_super_merchant";
 var dbModel = {
     // add a merchant
     add: async (data) => {
-        console.log("data => ", data);
+        // console.log("data => ", data);
         let qb = await pool.get_connection();
         let response = await qb.returning("id").insert(dbtable, data);
         qb.release();
@@ -24,7 +23,7 @@ var dbModel = {
             response = await qb
                 .select("*")
                 .where(condition)
-                .order_by("name", "asc")
+                .order_by("id", "asc")
                 .limit(limit.perpage, limit.start)
                 .get(dbtable);
             if (filter.country_name != "") {
@@ -68,6 +67,7 @@ var dbModel = {
         let qb = await pool.get_connection();
         let response = await qb.select(selection).where(condition).get(dbtable);
         qb.release();
+        console.log(response);
         return response[0];
     },
 
