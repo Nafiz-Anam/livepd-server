@@ -2,7 +2,6 @@ require("dotenv").config({ path: "../.env" });
 const env = process.env.ENVIRONMENT;
 const config = require("../config/config.json")[env];
 const pool = require("../config/database");
-const helpers = require("../utilities/helper/general_helper");
 const dbtable = config.table_prefix + "master_super_merchant";
 
 var dbModel = {
@@ -105,32 +104,6 @@ var dbModel = {
         let response = await qb.set(data).where(condition).update(dbtable);
         qb.release();
         return response;
-    },
-
-    // get total merchants count
-    get_count: async (condition_obj) => {
-        let qb = await pool.get_connection();
-
-        if (condition_obj.country_name != "") {
-            let condition = await helpers.get_conditional_like_string(
-                condition_obj
-            );
-            response = await qb.query(
-                "select count('id') as count from " +
-                    dbtable +
-                    " where deleted = 0 " +
-                    condition
-            );
-        } else {
-            response = await qb.query(
-                "select count('id') as count from " +
-                    dbtable +
-                    " where deleted = 0 "
-            );
-        }
-
-        qb.release();
-        return response[0].count;
     },
 };
 module.exports = dbModel;

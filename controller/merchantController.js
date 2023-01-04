@@ -3,11 +3,9 @@ const statusCode = require("../utilities/statuscode/index");
 const response = require("../utilities/response/ServerResponse");
 const helpers = require("../utilities/helper/general_helper");
 const enc_dec = require("../utilities/decryptor/decryptor");
-// const admin_activity_logger = require("../utilities/activity-logger/admin_activity_logger");
 
 var merchant = {
     add: async (req, res) => {
-        // let added_date = new Date().toJSON().substring(0, 19).replace("T", " ");
         let name = req.bodyString("name");
         let email = req.bodyString("email");
         let address_line_1 = req.bodyString("address_line_1");
@@ -40,7 +38,6 @@ var merchant = {
             alt_mobile_no: alt_mobile_no,
             roles: roles,
             allow_stores: allow_stores,
-            // updated_at: added_date,
             ip: await helpers.get_ip(req),
         };
 
@@ -49,26 +46,6 @@ var merchant = {
                 res.status(statusCode.ok).send(
                     response.successmsg("Merchant added successfully.")
                 );
-                // let module_and_user = {
-                //     user: req.user.id,
-                //     admin_type: req.user.type,
-                //     module: "Locations",
-                //     sub_module: "Country",
-                // };
-                // let added_name = req.bodyString("name");
-                // let headers = req.headers;
-                // admin_activity_logger
-                //     .add(module_and_user, added_name, headers)
-                //     .then((result) => {
-                //         res.status(statusCode.ok).send(
-                //             response.successmsg("Merchant added successfully.")
-                //         );
-                //     })
-                //     .catch((error) => {
-                //         res.status(statusCode.internalError).send(
-                //             response.errormsg(error.message)
-                //         );
-                //     });
             })
             .catch((error) => {
                 res.status(statusCode.internalError).send(
@@ -149,15 +126,12 @@ var merchant = {
     },
 
     details: async (req, res) => {
-        // let user_id = req.bodyString("user_id");
         let user_id = await enc_dec.cjs_decrypt(req.bodyString("user_id"));
-        // console.log(user_id);
 
         MerchantModel.selectOne("*", { id: user_id, deleted: 0 })
             .then((result) => {
                 let send_res = [];
                 let val = result;
-                // console.log("val", val);
                 let data = {
                     user_id: enc_dec.cjs_encrypt(val.id),
                     name: val.name,
@@ -195,7 +169,6 @@ var merchant = {
 
     update: async (req, res) => {
         try {
-            // let user_id = req.bodyString("user_id");
             let user_id = await enc_dec.cjs_decrypt(req.bodyString("user_id"));
             let name = req.bodyString("name");
             let email = req.bodyString("email");
@@ -238,26 +211,6 @@ var merchant = {
             res.status(statusCode.ok).send(
                 response.successmsg("User updated successfully")
             );
-
-            // let module_and_user = {
-            //     user: req.user.id,
-            //     admin_type: req.user.type,
-            //     module: "Locations",
-            //     sub_module: "Country",
-            // };
-            // let headers = req.headers;
-            // admin_activity_logger
-            //     .edit(module_and_user, country_id, headers)
-            //     .then((result) => {
-            //         res.status(statusCode.ok).send(
-            //             response.successmsg("Country updated successfully")
-            //         );
-            //     })
-            //     .catch((error) => {
-            //         res.status(statusCode.internalError).send(
-            //             response.errormsg(error.message)
-            //         );
-            //     });
         } catch (error) {
             console.log(error);
             res.status(statusCode.internalError).send(
@@ -268,7 +221,6 @@ var merchant = {
 
     user_deactivate: async (req, res) => {
         try {
-            // let user_id = req.bodyString("user_id");
             let user_id = await enc_dec.cjs_decrypt(req.bodyString("user_id"));
             var insdata = {
                 status: 1,
@@ -281,25 +233,6 @@ var merchant = {
             res.status(statusCode.ok).send(
                 response.successmsg("User deactivated successfully")
             );
-            // let module_and_user = {
-            //     user: req.user.id,
-            //     admin_type: req.user.type,
-            //     module: "Locations",
-            //     sub_module: "Country",
-            // };
-            // let headers = req.headers;
-            // admin_activity_logger
-            //     .deactivate(module_and_user, country_id, headers)
-            //     .then((result) => {
-            //         res.status(statusCode.ok).send(
-            //             response.successmsg("Country deactivated successfully")
-            //         );
-            //     })
-            //     .catch((error) => {
-            //         res.status(statusCode.internalError).send(
-            //             response.errormsg(error.message)
-            //         );
-            //     });
         } catch {
             res.status(statusCode.internalError).send(
                 response.errormsg(error.message)
@@ -309,7 +242,6 @@ var merchant = {
 
     user_activate: async (req, res) => {
         try {
-            // let user_id = req.bodyString("user_id");
             let user_id = await enc_dec.cjs_decrypt(req.bodyString("user_id"));
             var insdata = {
                 status: 0,
@@ -322,25 +254,6 @@ var merchant = {
             res.status(statusCode.ok).send(
                 response.successmsg("User activated successfully")
             );
-            // let module_and_user = {
-            //     user: req.user.id,
-            //     admin_type: req.user.type,
-            //     module: "Locations",
-            //     sub_module: "Country",
-            // };
-            // let headers = req.headers;
-            // admin_activity_logger
-            //     .activate(module_and_user, country_id, headers)
-            //     .then((result) => {
-            //         res.status(statusCode.ok).send(
-            //             response.successmsg("Country activated successfully")
-            //         );
-            //     })
-            //     .catch((error) => {
-            //         res.status(statusCode.internalError).send(
-            //             response.errormsg(error.message)
-            //         );
-            //     });
         } catch {
             res.status(statusCode.internalError).send(
                 response.errormsg(error.message)
@@ -350,7 +263,6 @@ var merchant = {
 
     user_delete: async (req, res) => {
         try {
-            // let user_id = req.bodyString("user_id");
             let user_id = await enc_dec.cjs_decrypt(req.bodyString("user_id"));
             var insdata = {
                 deleted: 1,
@@ -363,25 +275,6 @@ var merchant = {
             res.status(statusCode.ok).send(
                 response.successmsg("User deleted successfully")
             );
-            // let module_and_user = {
-            //     user: req.user.id,
-            //     admin_type: req.user.type,
-            //     module: "Locations",
-            //     sub_module: "Country",
-            // };
-            // let headers = req.headers;
-            // admin_activity_logger
-            //     .delete(module_and_user, country_id, headers)
-            //     .then((result) => {
-            //         res.status(statusCode.ok).send(
-            //             response.successmsg("Country deleted successfully")
-            //         );
-            //     })
-            //     .catch((error) => {
-            //         res.status(statusCode.internalError).send(
-            //             response.errormsg(error.message)
-            //         );
-            //     });
         } catch {
             res.status(statusCode.internalError).send(
                 response.errormsg(error.message)

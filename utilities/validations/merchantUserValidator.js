@@ -2,16 +2,8 @@ const Joi = require("joi").extend(require("@joi/date"));
 const ServerResponse = require("../response/ServerResponse");
 const StatusCode = require("../statuscode/index");
 const checkEmpty = require("./emptyChecker");
-const validate_mobile = require("./validate_mobile");
-const checkwithcolumn = require("./checkerwithcolumn");
 const checkifrecordexist = require("./checkifrecordexist");
 const enc_dec = require("../decryptor/decryptor");
-const multer = require("multer");
-const helpers = require("../helper/general_helper");
-const fs = require("fs");
-const encrypt_decrypt = require("../../utilities/decryptor/encrypt_decrypt");
-const { join } = require("path");
-const checkifrecordexistanddata = require("../../utilities/validations/checkifrecordexistanddata");
 
 const MerchantUserValidator = {
     user_add: async (req, res, next) => {
@@ -251,7 +243,7 @@ const MerchantUserValidator = {
                     .pattern(new RegExp(/^[A-Za-z0-9\s]+$/))
                     .error(() => {
                         return new Error(
-                            "Valid address line 1 required (max. characters 100)"
+                            "No special characters and max characters 100)"
                         );
                     }),
                 address_line_2: Joi.string()
@@ -261,7 +253,7 @@ const MerchantUserValidator = {
                     .pattern(new RegExp(/^[A-Za-z0-9\s]+$/))
                     .error(() => {
                         return new Error(
-                            "Valid address line 2 required (max. characters 100)"
+                            "No special characters and max characters 100)"
                         );
                     }),
                 address_line_3: Joi.string()
@@ -271,33 +263,29 @@ const MerchantUserValidator = {
                     .pattern(new RegExp(/^[A-Za-z0-9\s]+$/))
                     .error(() => {
                         return new Error(
-                            "Valid address line 3 required (max. characters 100)"
+                            "No special characters and max characters 100)"
                         );
                     }),
                 country: Joi.number()
                     .min(1)
-                    // .max(12)
                     .required()
                     .error(() => {
                         return new Error("Valid state required");
                     }),
                 state: Joi.number()
                     .min(1)
-                    // .max(12)
                     .required()
                     .error(() => {
                         return new Error("Valid state required");
                     }),
                 city: Joi.number()
                     .min(1)
-                    // .max(12)
                     .required()
                     .error(() => {
                         return new Error("Valid city required");
                     }),
                 zip_code: Joi.number()
                     .min(1)
-                    // .max(6)
                     .required()
                     .error(() => {
                         return new Error(
@@ -317,7 +305,7 @@ const MerchantUserValidator = {
                     .required()
                     .pattern(new RegExp(/^[0-9]+$/))
                     .error(() => {
-                        return new Error("Valid mobile no required");
+                        return new Error("Valid mobile no. required");
                     }),
                 alt_mobile_code: Joi.string()
                     .min(1)
@@ -336,7 +324,7 @@ const MerchantUserValidator = {
                     .allow("")
                     .pattern(new RegExp(/^[0-9]+$/))
                     .error(() => {
-                        return new Error("Valid alternate mobile no required");
+                        return new Error("Valid alternate mobile no. required");
                     }),
                 roles: Joi.string()
                     .min(3)
@@ -529,7 +517,6 @@ const MerchantUserValidator = {
                     .required()
                     .error(() => {
                         return new Error("Valid user ID required");
-                        // return new Error("User ID not found");
                     }),
             });
             try {
@@ -564,4 +551,5 @@ const MerchantUserValidator = {
         }
     },
 };
+
 module.exports = MerchantUserValidator;

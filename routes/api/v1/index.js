@@ -11,47 +11,52 @@ const CheckHeader = require("../../../utilities/tokenmanager/headers");
 const CheckToken = require("../../../utilities/tokenmanager/checkToken");
 const MerchantUserValidator = require("../../../utilities/validations/merchantUserValidator");
 
+// country routes
+app.post(
+    "/country/add",
+    CheckHeader,
+    CheckToken,
+    Validator.country_add,
+    countries.add
+);
 app.post("/country/list", CheckHeader, countries.list);
-app.post("/country/add", CheckHeader, Validator.country_add, countries.add);
 app.post(
     "/country/details",
     CheckHeader,
+    CheckToken,
     Validator.country_details,
     countries.details
 );
 app.post(
     "/country/update",
     CheckHeader,
+    CheckToken,
     Validator.country_update,
     countries.update
 );
 app.post(
     "/country/deactivate",
     CheckHeader,
+    CheckToken,
     Validator.country_deactivate,
     countries.country_deactivate
 );
 app.post(
     "/country/activate",
     CheckHeader,
+    CheckToken,
     Validator.country_activate,
     countries.country_activate
 );
 app.post(
     "/country/delete",
     CheckHeader,
+    CheckToken,
     Validator.country_delete,
     countries.country_delete
 );
-// app.post('/country/add', CheckHeader, CheckToken, Validator.country_add, countries.add);
-// app.post('/country/list', CheckHeader, countries.list);
-// app.post('/country/details', CheckHeader, CheckToken, Validator.country_details, countries.details);
-// app.post('/country/update', CheckHeader, CheckToken, Validator.country_update, countries.update);
-// app.post('/country/deactivate', CheckHeader, CheckToken, Validator.country_deactivate, countries.country_deactivate);
-// app.post('/country/activate', CheckHeader, CheckToken, Validator.country_activate, countries.country_activate);
-// app.post('/country/delete', CheckHeader, CheckToken, Validator.country_delete, countries.country_delete);
 
-// merchants routes
+// merchants users routes
 app.post("/merchant/list", CheckHeader, merchants.list);
 app.post(
     "/merchant/user/add",
