@@ -7,7 +7,7 @@ const enc_dec = require("../utilities/decryptor/decryptor");
 
 var merchant = {
     add: async (req, res) => {
-        let added_date = new Date().toJSON().substring(0, 19).replace("T", " ");
+        // let added_date = new Date().toJSON().substring(0, 19).replace("T", " ");
         let name = req.bodyString("name");
         let email = req.bodyString("email");
         let address_line_1 = req.bodyString("address_line_1");
@@ -82,6 +82,11 @@ var merchant = {
             perpage: 0,
             page: 0,
         };
+
+        let condition = { deleted: 0, status: 0 };
+        let condition2 = {};
+
+        // pagination code
         if (req.bodyString("perpage") && req.bodyString("page")) {
             perpage = parseInt(req.bodyString("perpage"));
             start = parseInt(req.bodyString("page"));
@@ -89,26 +94,24 @@ var merchant = {
             limit.start = (start - 1) * perpage;
         }
 
-        const country = req.bodyString("country_name");
-        const filter = { country_name: "" };
-        if (req.bodyString("country_name")) {
-            filter.country_name = country;
+        // filter code
+        if (req.bodyString("email")) {
+            const email = req.bodyString("email");
+            condition.email = email;
+        }
+        if (req.bodyString("mobile_code") && req.bodyString("mobile_no")) {
+            const mobile_code = req.bodyString("mobile_code");
+            const mobile_no = req.bodyString("mobile_no");
+            condition.code = mobile_code;
+            condition.mobile_no = mobile_no;
+            condition2.alt_mobile_code = mobile_code;
+            condition2.alt_mobile_no = mobile_no;
         }
 
-        let filter_arr = { deleted: 0 };
-
-        if (req.bodyString("status") == "Active") {
-            filter_arr.status = 0;
-        }
-        if (req.bodyString("status") == "Deactivated") {
-            filter_arr.status = 1;
-        }
-
-        MerchantModel.select(filter_arr, filter, limit)
+        MerchantModel.select(condition, condition2, limit)
             .then(async (result) => {
                 let send_res = [];
                 result.forEach(function (val, key) {
-                    console.log(val);
                     let res = {
                         user_id: enc_dec.cjs_encrypt(val.id),
                         name: val.name,
@@ -120,7 +123,7 @@ var merchant = {
                         state: val.state,
                         city: val.city,
                         zip_code: val.zip_code,
-                        code: val.mobile_code,
+                        mobile_code: val.code,
                         mobile_no: val.mobile_no,
                         alt_mobile_code: val.alt_mobile_code,
                         alt_mobile_no: val.alt_mobile_no,
@@ -130,16 +133,15 @@ var merchant = {
                     };
                     send_res.push(res);
                 });
-                total_count = await MerchantModel.get_count(filter);
                 res.status(statusCode.ok).send(
                     response.successdatamsg(
                         send_res,
-                        "List fetched successfully.",
-                        total_count
+                        "List fetched successfully."
                     )
                 );
             })
             .catch((error) => {
+                console.log("error", error);
                 res.status(statusCode.internalError).send(
                     response.errormsg(error.message)
                 );

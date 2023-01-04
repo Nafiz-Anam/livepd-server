@@ -16,7 +16,7 @@ var dbModel = {
     },
 
     // get all merchants
-    select: async (condition, filter, limit) => {
+    select: async (condition, condition2, limit) => {
         let qb = await pool.get_connection();
         let response;
         if (limit.perpage) {
@@ -26,12 +26,26 @@ var dbModel = {
                 .order_by("id", "asc")
                 .limit(limit.perpage, limit.start)
                 .get(dbtable);
-            if (filter.country_name != "") {
+            if (condition.email) {
                 response = await qb
                     .select("*")
                     .where(condition)
-                    .like(filter)
-                    .order_by("name", "asc")
+                    .order_by("id", "asc")
+                    .limit(limit.perpage, limit.start)
+                    .get(dbtable);
+            } else if (condition.mobile_no && condition.mobile_code) {
+                response = await qb
+                    .select("*")
+                    .where(condition)
+                    .or_where(condition2)
+                    .order_by("id", "asc")
+                    .limit(limit.perpage, limit.start)
+                    .get(dbtable);
+            } else {
+                response = await qb
+                    .select("*")
+                    .where(condition)
+                    .order_by("id", "asc")
                     .limit(limit.perpage, limit.start)
                     .get(dbtable);
             }
@@ -40,14 +54,27 @@ var dbModel = {
             response = await qb
                 .select("*")
                 .where(condition)
-                .order_by("name", "asc")
+                .order_by("id", "asc")
                 .get(dbtable);
-            if (filter.country_name != "") {
+            if (condition.email) {
                 response = await qb
                     .select("*")
                     .where(condition)
-                    .like(filter)
-                    .order_by("name", "asc")
+                    .order_by("id", "asc")
+                    .get(dbtable);
+            } else if (condition.mobile_no && condition.code) {
+                console.log("hotter3");
+                response = await qb
+                    .select("*")
+                    .where(condition)
+                    .or_where(condition2)
+                    .order_by("id", "asc")
+                    .get(dbtable);
+            } else {
+                response = await qb
+                    .select("*")
+                    .where(condition)
+                    .order_by("id", "asc")
                     .get(dbtable);
             }
             qb.release();
@@ -56,13 +83,6 @@ var dbModel = {
     },
 
     // get a merchant
-    selectSpecific: async (selection, condition) => {
-        let qb = await pool.get_connection();
-        let response = await qb.select(selection).where(condition).get(dbtable);
-        qb.release();
-        return response;
-    },
-
     selectOne: async (selection, condition) => {
         let qb = await pool.get_connection();
         let response = await qb.select(selection).where(condition).get(dbtable);
@@ -79,7 +99,7 @@ var dbModel = {
         return response[0];
     },
 
-    // update merchant details
+    // update a merchant details
     updateDetails: async (condition, data) => {
         let qb = await pool.get_connection();
         let response = await qb.set(data).where(condition).update(dbtable);

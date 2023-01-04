@@ -9,6 +9,7 @@ const merchants = require("../../../controller/merchantController");
 /*O Auth2 Manager*/
 const CheckHeader = require("../../../utilities/tokenmanager/headers");
 const CheckToken = require("../../../utilities/tokenmanager/checkToken");
+const MerchantUserValidator = require("../../../utilities/validations/merchantUserValidator");
 
 app.post("/country/list", CheckHeader, countries.list);
 app.post("/country/add", CheckHeader, Validator.country_add, countries.add);
@@ -52,36 +53,41 @@ app.post(
 
 // merchants routes
 app.post("/merchant/list", CheckHeader, merchants.list);
-app.post("/merchant/user/add", CheckHeader, merchants.add);
+app.post(
+    "/merchant/user/add",
+    CheckHeader,
+    MerchantUserValidator.user_add,
+    merchants.add
+);
 app.post(
     "/merchant/user/details",
     CheckHeader,
-    // Validator.country_details,
+    MerchantUserValidator.user_details,
     merchants.details
 );
 app.post(
     "/merchant/user/update",
     CheckHeader,
-    // Validator.country_update,
+    MerchantUserValidator.user_update,
     merchants.update
 );
 app.post(
     "/merchant/user/deactivate",
     CheckHeader,
-    // Validator.country_deactivate,
+    MerchantUserValidator.user_deactivate,
     merchants.user_deactivate
 );
 app.post(
     "/merchant/user/activate",
     CheckHeader,
-    // Validator.country_activate,
+    MerchantUserValidator.user_activate,
     merchants.user_activate
 );
 
 app.post(
     "/merchant/user/delete",
     CheckHeader,
-    // Validator.country_delete,
+    MerchantUserValidator.user_delete,
     merchants.user_delete
 );
 
